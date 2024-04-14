@@ -9,7 +9,7 @@ def up():
         Create a global secondary index on the 'users' table to support querying by email.
     """
     dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
-    table = dynamodb.Table('basic-app-users')
+    table = dynamodb.Table('migrations-directory-users')
     response = table.update(
         AttributeDefinitions=[
             {
@@ -45,7 +45,7 @@ def down():
         Remove the global secondary index named 'EmailIndex' from the 'users' table.
     """
     dynamodb = boto3.resource('dynamodb', region_name='us-west-2')
-    table = dynamodb.Table('basic-app-users')
+    table = dynamodb.Table('migrations-directory-users')
     response = table.update(
         GlobalSecondaryIndexUpdates=[
             {
