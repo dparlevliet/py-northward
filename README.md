@@ -102,7 +102,7 @@ docker-compose run migrate pytest /src/tests/
 Running examples
 ===============
 ```bash
-python3 migrate.py --engine dynamodb --dynamodb-endpoint-url=http://dynamodb:8000 --table migrations_for_app_with_modules --directory /examples/app_with_modules up
-python3 migrate.py --engine dynamodb --dynamodb-endpoint-url=http://dynamodb:8000 --table migrations_for_basic_app --directory /examples/basic_app up
-python3 migrate.py --engine dynamodb --dynamodb-endpoint-url=http://dynamodb:8000 --table migrations_for_migrations_directory --directory /examples/migrations_directory up
+docker-compose run migrate python3 migrate.py --engine dynamodb --dynamodb-endpoint-url=http://dynamodb:8000 --table migrations_for_app_with_modules --directory /examples/app_with_modules up
+docker-compose run migrate python3 migrate.py --engine dynamodb --dynamodb-endpoint-url=http://dynamodb:8000 --table migrations_for_basic_app --directory /examples/basic_app up
+docker-compose run migrate python3 migrate.py --engine dynamodb --dynamodb-endpoint-url=http://dynamodb:8000 --table migrations_for_migrations_directory --directory /examples/migrations_directory up
 ```
