@@ -11,7 +11,7 @@ def up():
 
     dynamodb = boto3.resource('dynamodb', region_name='us-west-2', endpoint_url='http://dynamodb:8000')
     dynamodb.create_table(
-        TableName='users',
+        TableName='app-with-modules-users',
         KeySchema=[ {'AttributeName': 'username', 'KeyType': 'HASH'} ],
         AttributeDefinitions=[ {'AttributeName': 'username', 'AttributeType': 'S'} ],
         ProvisionedThroughput={'ReadCapacityUnits': 5, 'WriteCapacityUnits': 5}
@@ -24,4 +24,4 @@ def down():
     """
 
     dynamodb = boto3.resource('dynamodb', region_name='us-west-2', endpoint_url='http://dynamodb:8000')
-    dynamodb.Table('users').delete()
+    dynamodb.Table('app-with-modules-users').delete()
