@@ -84,7 +84,7 @@ Migration CLI arguments
 | `--dry-run`                 | `False` (flag)     | Perform a dry run (simulate the migration without making any changes).                             |
 | `--migrate-dependencies`    | `False` (flag)     | Automatically migrate dependencies.                                                                |
 | `command`                   | (required choice)  | Command to execute. Choices are `up`, `down`, `rollback`, `status`, `make`.                        |
-| `n`                         | `0`                | Number of migrations to rollback or apply. Only applicable for `rollback` and other commands.      |
+| `n`                         | `0`                | Number of migrations to rollback or apply. Only applicable for `rollback` or `down` commands.     |
 
 
 Dev testing with docker
