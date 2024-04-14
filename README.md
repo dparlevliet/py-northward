@@ -72,6 +72,21 @@ Currently supported
 * In-memory (for testing purposes only, not intended for production)
 
 
+Migration CLI arguments
+=======================
+| Parameter                   | Default            | Description                                                                                        |
+|-----------------------------|--------------------|----------------------------------------------------------------------------------------------------|
+| `--engine`                  | `dynamodb`         | Storage engine to use.                                                                             |
+| `--dynamodb-endpoint-url`   | `None`             | DynamoDB endpoint URL. This is required if connecting to a custom DynamoDB instance.               |
+| `--table`                   | `migrations`       | Name of the table to manage migrations.                                                            |
+| `--directory`               | `./migrations`     | Directory where migration files are stored.                                                        |
+| `--file`                    | `None`             | Specific migration file to run. Takes precedence over the directory.                               |
+| `--dry-run`                 | `False` (flag)     | Perform a dry run (simulate the migration without making any changes).                             |
+| `--migrate-dependencies`    | `False` (flag)     | Automatically migrate dependencies.                                                                |
+| `command`                   | (required choice)  | Command to execute. Choices are `up`, `down`, `rollback`, `status`, `make`.                        |
+| `n`                         | `0`                | Number of migrations to rollback or apply. Only applicable for `rollback` and other commands.      |
+
+
 Dev testing with docker
 =======================
 ```bash

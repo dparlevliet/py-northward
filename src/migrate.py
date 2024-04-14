@@ -158,8 +158,8 @@ class MigratorHelpers:
 
         if not migration_files:
             if os.path.exists(os.path.join(self.directory, 'migrations')):
-                self.directory = os.path.join(self.directory, 'migrations')
                 # Assume we need to look for migrations within a migrations folder
+                self.directory = os.path.join(self.directory, 'migrations')
                 migration_files = [os.path.join(self.directory, f) for f in os.listdir(self.directory) if self._is_migration_file(f)]
             else:
                 # Assume we need to look for migrations within modules
@@ -167,6 +167,22 @@ class MigratorHelpers:
                 for module_path in modules:
                     migrations_path = os.path.join(module_path, 'migrations')
                     migration_files += [os.path.join(migrations_path, f) for f in os.listdir(migrations_path) if self._is_migration_file(f)]
+
+        # Check if there are any duplicate migration file names. We need all names to be unique.
+        migration_names = {}
+        migration_timestamps = {}
+        for f in migration_files:
+            name = os.path.basename(f).replace('.py', '')
+            if name in migration_names:
+                raise ValueError(f"Duplicate migration file name used: {f}")
+
+            # check if the timestamp is unique
+            timestamp = name.split('_')[0]
+            if timestamp in migration_timestamps:
+                raise ValueError(f"Duplicate migration timestamp used: {f}")
+
+            migration_timestamps[timestamp] = True
+            migration_names[name] = True
 
         return migration_files
 
@@ -176,6 +192,7 @@ class MigratorHelpers:
             '<modulename>/migrations/<migration_name>.py'. This function translates
             the module and migration name into a path relative to the project's base directory.
         """
+
         # Split the dependency string on '/' to separate out the module name and migration name
         parts = dependency.split('/')
         if len(parts) == 3 and parts[1] == "migrations":
@@ -211,7 +228,6 @@ class Migrator(MigratorHelpers):
         A migration file looks like this:
 
             ```
-            # Path: migrations/20210101000000_create_users_table.py
             dependencies = [
                 '<module>/migrations/20210101000000_create_roles_table',
                 '20210101000000_create_permissions_table'
@@ -295,9 +311,9 @@ class Migrator(MigratorHelpers):
         migrations_map = {os.path.basename(f).replace('.py', ''): f for f in migration_files}
         migration_files = self.storage_engine.get_last_n(n)
 
-        # Rollback the last n migrations
         count = 0
         for file in migration_files:
+            file = os.path.basename(file).replace('.py', '')
             script = self._load_script(migrations_map[file])
             self.down(script)
 
@@ -326,12 +342,13 @@ class Migrator(MigratorHelpers):
         """
 
         filename = time.strftime('%Y%m%d%H%M%S') + '_migration.py'
+
         # get the filename of the previous file to add it as a dependency
         files = sorted(os.listdir(self.directory), reverse=True)
+
         dependency_filename = f"'{files[0].replace('.py', '')}'" if files else ''
         with open(os.path.join(self.directory, filename), 'w') as f:
             f.write(f"""
-# Path: migrations/{filename}
 dependencies = [
     # List of dependencies
     {dependency_filename}
