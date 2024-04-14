@@ -1,0 +1,23 @@
+name: Run Docker Compose Tests
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v2
+
+      - name: Run migrations and tests with Docker Compose
+        run: docker-compose run migrate pytest /src/tests/
+
+      - name: Docker Compose Down (cleanup)
+        run: docker-compose down
