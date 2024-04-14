@@ -27,6 +27,26 @@ app/
 ```
 
 
+Anatomy of a migration file
+===========================
+```python
+dependencies = [
+    # List of dependency file names (without .py)
+]
+
+def up():
+    # do something here, anything you want
+    pass
+
+
+def down():
+    # roll back the thing you did
+    pass
+
+# don't put any run logic outside of a function, this is an imported module
+```
+
+
 Migration file name formatting
 ==============================
 Migration files must follow the format of `time.strftime('%Y%m%d%H%M%S') + '_<anything>.py'`
